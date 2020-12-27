@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>基于showdownjs的MD预览</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+}
+.editor {
+  height: 100vh;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background-image: linear-gradient(to right, #1d2b2d 0%, #000 100%);
+}
+header img {
+  margin-left: 10px;
+  width: 32px;
+  border-radius: 50%;
+}
+.editor-body {
+  padding: 10px;
+  width: 860px;
+  margin: 0 auto;
+  /* height: calc(100% - 60px); */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
+textarea {
+  width: 100%;
+  height: 200px;
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.left-side {
+  height: 100%;
+}
+.left-side,
+.right-side {
+  min-height: 100%;
+  width: 48%;
+  border-radius: 4px;
+}
+.right-side {
+  position: relative;
+  box-sizing: border-box;
+  padding: 10px;
+  padding-top: 0;
+  padding-bottom: 30px;
+  border: 1px solid darkgoldenrod;
+}
+#previewer {
+  margin-top: 30px;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  border: 1px solid darkgoldenrod;
+  box-sizing: border-box;
+  border-radius: 4px;
+  min-height: 300px;
+}
+.preview-wrapper {
+  margin-top: 30px;
+}
+.config-wrapper {
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="editor">
+  <header>
+    <div class="logo">
+      <img src="./img/mayueyue.png" />
+    </div>
+  </header>
+  <div class="editor-body">
+    <textarea id="mdTextarea" placeholder="Write markdown here or paste the HTML that you copy form wereader. 在这里编写markdown，或者从微信读书助手拷贝的HTML. "></textarea>
+    <div class="preview-wrapper">
+      <hr>
+      <div class="config-wrapper">
+        <span>
+          <span id="configWidth">宽度</span>
+          <input id="widthInput" />
+        </span>
+        <span id="configWidth">字体颜色</span>
+        <span id="configWidth">字体大小</span>
+        <button id="saveAsImg">存为图片</button>
+      </div>
+      <div id="previewer"></div>
+    </div>
+    <!-- <div class="left-side">
+    </div>
+    <div class="right-side">
+    </div> -->
+  </div>
+</div>
+<script src="./js/lib/showdownjs.min.js"></script>
+<script src="./js/lib/html2canvas.min.js"></script>
+<script src="./js/lib/clipboard.min.js"></script>
+<script>
+function convert(text) {
+  return new showdown.Converter().makeHtml(text);
+}
+
+var mdTextarea = document.querySelector('#mdTextarea');
+var previewer = document.querySelector('#previewer');
+var rightSide = document.querySelector('.right-side');
+var preCanvas = null;
+mdTextarea.addEventListener('input', function(event) {
+  previewer.innerHTML = convert(event.target.value);
+  previewer.scrollTop = previewer.scrollHeight
+  html2canvas(previewer, {
+  }).then(function(canvas) {
+    preCanvas = canvas;
+    // canvas.toBlob(function(blob) {
+    //   saveAs(blob, "pretty image.png");
+    // });
+    // document.body.appendChild(canvas);
+  });
+});
+
+</script>
+</body>
+</html>
