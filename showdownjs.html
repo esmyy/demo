@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>基于showdownjs的MD预览</title>
+  <link rel="icon" type="image/png" href="https://mayueyue213.github.io/blog/img/mayueyue.png">
 <style>
 body {
   margin: 0;
@@ -42,38 +43,64 @@ textarea {
   padding: 10px;
   box-sizing: border-box;
 }
-.left-side {
-  height: 100%;
+.preview-wrapper {
+  margin-top: 30px;
 }
-.left-side,
-.right-side {
-  min-height: 100%;
-  width: 48%;
+.config-wrapper {
+  /* display: none; */
+  display: flex;
+  align-items: center;
+}
+button {
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  color: #fff;
   border-radius: 4px;
 }
-.right-side {
-  position: relative;
+.sub,
+.add {
+  display: inline-block;
+  height: 30px;
+  background: darkgoldenrod;
+  width: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+.sub {
+  margin-left: 10px;
+  border-radius: 4px 0 0 4px;
+}
+.add {
+  border-radius: 0 4px 4px 0;
+}
+input {
+  height: 30px;
+  padding: 4px;
+  margin: 0;
   box-sizing: border-box;
-  padding: 10px;
-  padding-top: 0;
-  padding-bottom: 30px;
-  border: 1px solid darkgoldenrod;
+  outline: none;
+  border: none;
+  border: 2px solid darkgoldenrod;
+  background-color: transparent;
+}
+#saveAsImg {
+  height: 30px;
+  background: green;
+  margin-left: 30px;
+  cursor: pointer;
 }
 #previewer {
-  margin-top: 30px;
+  margin-top: 10px;
   width: 100%;
   height: 100%;
-  padding: 10px;
   border: 1px solid darkgoldenrod;
   box-sizing: border-box;
   border-radius: 4px;
   min-height: 300px;
 }
-.preview-wrapper {
-  margin-top: 30px;
-}
-.config-wrapper {
-  display: none;
+#previewer .inner {
+  padding: 10px 20px;
 }
 </style>
 </head>
@@ -89,47 +116,70 @@ textarea {
     <div class="preview-wrapper">
       <hr>
       <div class="config-wrapper">
-        <span>
-          <span id="configWidth">宽度</span>
-          <input id="widthInput" />
-        </span>
-        <span id="configWidth">字体颜色</span>
+        <span id="configWidth">宽度</span>
+        <button class="sub" id="widthSub">-</button>
+        <input id="widthInput" value="860" />
+        <button class="add" id="widthAdd">+</button>
+        <!-- <span id="configWidth">字体颜色</span>
+        <input id="widthInput" type="color" />
+        <span class="sub">-</span>
         <span id="configWidth">字体大小</span>
+        <span class="sub">+</span> -->
         <button id="saveAsImg">存为图片</button>
       </div>
-      <div id="previewer"></div>
+      <div id="previewer">
+        <div class="inner"></div>
+      </div>
     </div>
-    <!-- <div class="left-side">
-    </div>
-    <div class="right-side">
-    </div> -->
   </div>
 </div>
 <script src="./js/lib/showdownjs.min.js"></script>
 <script src="./js/lib/html2canvas.min.js"></script>
-<script src="./js/lib/clipboard.min.js"></script>
+<script src="./js/lib/filesaver.min.js"></script>
 <script>
 function convert(text) {
   return new showdown.Converter().makeHtml(text);
 }
 
-var mdTextarea = document.querySelector('#mdTextarea');
-var previewer = document.querySelector('#previewer');
-var rightSide = document.querySelector('.right-side');
-var preCanvas = null;
+const mdTextarea = document.querySelector('#mdTextarea');
+const previewer = document.querySelector('#previewer').querySelector('.inner');
+const widthInput = document.querySelector('#widthInput')
+const addBtn = document.querySelector('#widthAdd');
+const subBtn = document.querySelector('#widthSub');
+const saveBtn = document.querySelector('#saveAsImg');
+const editor = document.querySelector('.editor-body');
+let prevWidth = Number(widthInput.value);
+let preCanvas = null;
+
 mdTextarea.addEventListener('input', function(event) {
   previewer.innerHTML = convert(event.target.value);
   previewer.scrollTop = previewer.scrollHeight
   html2canvas(previewer, {
   }).then(function(canvas) {
     preCanvas = canvas;
-    // canvas.toBlob(function(blob) {
-    //   saveAs(blob, "pretty image.png");
-    // });
-    // document.body.appendChild(canvas);
   });
 });
 
+addBtn.addEventListener('click', function(event) {
+  prevWidth += 1;
+  changeWidth(widthInput, editor, prevWidth);
+});
+subBtn.addEventListener('click', function(event) {
+  prevWidth -= 1;
+  changeWidth(widthInput, editor, prevWidth);
+});
+saveBtn.addEventListener('click', function(event) {
+  if (preCanvas) {
+    preCanvas.toBlob(function(blob) {
+      saveAs(blob, "notes.png");
+    });
+  }
+});
+
+function changeWidth(input, preview, width) {
+  input.value = width;
+  preview.style.width = `${width}px`;
+}
 </script>
 </body>
 </html>
