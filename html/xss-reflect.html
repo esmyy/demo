@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <input id="searchInput" />
+  <button id="searchBtn">搜索</button>
+<script>
+// 处理搜索
+let btn = document.querySelector('#searchBtn');
+let input = document.querySelector('#searchInput');
+btn.addEventListener('click', () => {
+  let val = input.value;
+  window.location.href = encodeURI(`${location.origin}${location.pathname}?q=${val}`)
+})
+
+// 模拟设置数据，只为实现，不管啥奇奇怪怪写法哈
+let search = location.search.replace(/^\?q=/, '');
+let el = document.createElement('div');
+el.innerHTML = decodeURIComponent(search);
+document.body.append(el)
+</script>
+<script>alert('s')</script>
+</body>
+</html>
