@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>回流演示</title>
+</head>
+<body>
+  <div id="demo">hello</div>
+  <script>
+    // 为了更清晰看出效果，在FP之后搞一次重绘
+    setTimeout(() => {
+      let demo = document.getElementById('demo');
+      demo.style.width = '200px';
+    }, 2000)
+  </script>
+</body>
+</html>

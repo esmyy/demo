@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>重绘演示</title>
+</head>
+<body>
+  <div id="demo">hello</div>
+  <script>
+    // 为了更清晰看出效果，在FP之后搞一次重绘，可以直接切到大概 2s 的位置查看
+    setTimeout(() => {
+      let demo = document.getElementById('demo');
+      demo.style.color = red;
+    }, 2000)
+  </script>
+</body>
+</html>
