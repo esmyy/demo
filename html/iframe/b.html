@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>a</title>
+  </head>
+  <body>
+    <div>this is page a</div>
+    <iframe src="/html/iframe/b.html"></iframe>
+    <script>
+      var iframe = document.getElementsByTagName('iframe')[0];
+      console.log('contentWindow 🥝', iframe.contentWindow); // 能访问
+      console.log('contentDocument 🥝', iframe.contentDocument); // 能访问
+    </script>
+  </body>
+</html>
